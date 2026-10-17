@@ -13,13 +13,15 @@ import { ReportsModule } from './components/modules/ReportsModule';
 import { AccountsModule } from './components/modules/AccountsModule';
 import { NotificationsModule } from './components/modules/NotificationsModule';
 import { WalletModule } from './components/modules/WalletModule';
+import { StaffModule } from './components/modules/StaffModule';
 
 import { 
   INITIAL_STORES, 
   INITIAL_SHIFT, 
   INITIAL_NOTIFICATIONS,
   INITIAL_USERS,
-  AUDIT_LOGS
+  AUDIT_LOGS,
+  INITIAL_HR_DATA
 } from './data/mockData';
 
 export default function App() {
@@ -31,6 +33,9 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState(INITIAL_USERS[0]); // Default Nguyễn Văn Tuấn (Owner)
   const [currentUserRole, setCurrentUserRole] = useState(INITIAL_USERS[0].role);
   const [auditLogs, setAuditLogs] = useState(AUDIT_LOGS);
+
+  // Spec 13: Nhân sự, ca kíp, chấm công & lương (giữ ở App để không mất khi chuyển màn hình)
+  const [hrData, setHrData] = useState(INITIAL_HR_DATA);
 
   const [currentModule, setCurrentModule] = useState('pos'); // Current active screen
   const [activeShift, setActiveShift] = useState(INITIAL_SHIFT);
@@ -157,6 +162,17 @@ export default function App() {
       user: currentUser.name,
       action: nextStatus === 'LOCKED' ? 'KHÓA TÀI KHOẢN' : 'MỞ KHÓA TÀI KHOẢN',
       detail: `${nextStatus === 'LOCKED' ? 'Khóa' : 'Mở khóa'} tài khoản nhân sự ${targetName} theo quy tắc Spec 01.`
+    }, ...prev]);
+  };
+
+  // Ghi audit log cho thao tác của user hiện tại
+  const addAuditLog = (action, detail) => {
+    setAuditLogs(prev => [{
+      id: `LOG-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
+      user: currentUser.name,
+      action,
+      detail
     }, ...prev]);
   };
 
@@ -324,6 +340,18 @@ export default function App() {
               currentStore={selectedStore}
               currentUser={currentUser}
               onNavigate={handleNavigate}
+            />
+          )}
+
+          {currentModule === 'staff' && (
+            <StaffModule 
+              users={users}
+              currentUser={currentUser}
+              currentUserRole={currentUserRole}
+              selectedStore={selectedStore}
+              hrData={hrData}
+              setHrData={setHrData}
+              onAuditLog={addAuditLog}
             />
           )}
 

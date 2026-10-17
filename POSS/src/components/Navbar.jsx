@@ -90,7 +90,7 @@ export function Navbar({
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span className="navbar-brand-name" style={{ fontFamily: 'var(--font-heading)', fontSize: '17px', fontWeight: '800', letterSpacing: '-0.5px', color: '#fff' }}>POSS</span>
+              <span className="navbar-brand-name" style={{ fontFamily: 'var(--font-heading)', fontSize: '17px', fontWeight: '800', letterSpacing: '-0.5px', color: '#fff' }}>Ba.li Poss</span>
             </div>
           </div>
         </div>
@@ -117,7 +117,7 @@ export function Navbar({
           >
             <Store size={13} color="var(--accent-amber)" style={{ flexShrink: 0 }} />
             <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {selectedStore?.name?.replace('POSS ', '')}
+              {selectedStore?.name?.replace('Ba.li Poss ', '')}
             </span>
             <ChevronDown size={11} color="var(--text-muted)" style={{ flexShrink: 0 }} />
           </button>

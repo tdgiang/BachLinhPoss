@@ -15,7 +15,8 @@ import {
   ShieldAlert,
   X,
   Coffee,
-  Wallet
+  Wallet,
+  BriefcaseBusiness
 } from 'lucide-react';
 
 export function Sidebar({ 
@@ -34,6 +35,7 @@ export function Sidebar({
         { id: 'pos', name: '04. Màn hình bán hàng', icon: ShoppingCart, roles: ['OWNER', 'MANAGER', 'STAFF'], badge: 'Chính' },
         { id: 'payments', name: '05. Thanh toán & Bill', icon: CreditCard, roles: ['OWNER', 'MANAGER', 'STAFF'] },
         { id: 'shifts', name: '06. Quản lý ca làm việc', icon: Clock, roles: ['OWNER', 'MANAGER', 'STAFF'] },
+        { id: 'staff', name: '13. Nhân sự & Lương', icon: BriefcaseBusiness, roles: ['OWNER', 'MANAGER', 'STAFF'], badge: 'Mới' },
       ]
     },
     {
@@ -96,7 +98,7 @@ export function Sidebar({
             <Coffee size={18} />
           </div>
           <span style={{ fontSize: '16px', fontWeight: '800', color: '#fff', fontFamily: 'var(--font-heading)' }}>
-            Menu POSS
+            Menu Ba.li Poss
           </span>
         </div>
 

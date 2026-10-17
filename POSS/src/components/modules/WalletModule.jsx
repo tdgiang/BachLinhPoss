@@ -125,7 +125,7 @@ export function WalletModule({ currentUserRole = 'OWNER', currentStore, currentU
       promoId: appliedPromo?.id || null,
       promoName: appliedPromo?.name || 'Nạp tiêu chuẩn (Không KM)',
       staff: currentUser?.name ? `${currentUser.name} (${currentUserRole})` : 'Lê Hoàng Nam (Staff)',
-      store: currentStore?.name || 'POSS Cầu Giấy',
+      store: currentStore?.name || 'Ba.li Poss Cầu Giấy',
       time: new Date().toLocaleString('vi-VN'),
       notes: `Khách nạp ${Number(topupAmount).toLocaleString('vi-VN')}đ, nhận ${totalCredited.toLocaleString('vi-VN')}đ vào ví`,
     };
@@ -203,8 +203,8 @@ export function WalletModule({ currentUserRole = 'OWNER', currentStore, currentU
       balanceAfter: adjustTargetWallet.balance + delta,
       method: 'Điều chỉnh hệ thống',
       reason: adjustReason,
-      staff: currentUser?.name ? `${currentUser.name} (${currentUserRole})` : 'Quản lý POSS',
-      store: currentStore?.name || 'POSS Toàn Chuỗi',
+      staff: currentUser?.name ? `${currentUser.name} (${currentUserRole})` : 'Quản lý Ba.li Poss',
+      store: currentStore?.name || 'Ba.li Poss Toàn Chuỗi',
       time: new Date().toLocaleString('vi-VN'),
       notes: adjustNote || 'Điều chỉnh số dư ví thủ công có kiểm toán',
     };
@@ -1117,7 +1117,7 @@ export function WalletModule({ currentUserRole = 'OWNER', currentStore, currentU
               <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <div className="receipt-paper" style={{ width: '100%', maxWidth: '340px' }}>
                   <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-                    <div style={{ fontSize: '16px', fontWeight: '800' }}>POSS COFFEE & TEA</div>
+                    <div style={{ fontSize: '16px', fontWeight: '800' }}>BA.LI POSS COFFEE & TEA</div>
                     <div style={{ fontSize: '10px' }}>{currentStore?.address || '128 Xuân Thủy, Cầu Giấy, Hà Nội'}</div>
                     <div style={{ fontSize: '10px' }}>Hotline: 024 3838 9999</div>
                   </div>
@@ -1174,7 +1174,7 @@ export function WalletModule({ currentUserRole = 'OWNER', currentStore, currentU
                   </div>
 
                   <div style={{ textAlign: 'center', marginTop: '14px', fontSize: '10px', color: '#6b7280' }}>
-                    Số dư ví sử dụng thanh toán vĩnh viễn trên toàn chuỗi POSS.
+                    Số dư ví sử dụng thanh toán vĩnh viễn trên toàn chuỗi Ba.li Poss.
                     <br />
                     Cảm ơn quý khách!
                   </div>

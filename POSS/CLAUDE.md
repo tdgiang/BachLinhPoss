@@ -1,100 +1,66 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+File này cung cấp hướng dẫn cho Claude Code (claude.ai/code) khi làm việc với code trong repository này.
 
-## Project
+## Dự án
 
-POSS (Point of Sale System) — A comprehensive Vietnamese POS application for managing sales, inventory, staff, customers, and operations across multi-store restaurant/retail chains. Built with React + Vite with a modular architecture based on 11 functional specifications.
+POSS — bản UI prototype (`poss-ui-prototype`) của hệ thống POS tiếng Việt dành cho chuỗi quán café/nhà hàng nhiều cửa hàng. React 19 + Vite 8, JavaScript thuần (JSX, không dùng TypeScript), icon dùng `lucide-react`. Không có backend, không router, không thư viện quản lý state: mọi thứ chạy trên mock data trong bộ nhớ và bị reset khi tải lại trang. Toàn bộ text giao diện là tiếng Việt. Tên thương hiệu hiển thị là **Ba.li Poss** (tên cửa hàng dạng `Ba.li Poss Cầu Giấy`); các mã kỹ thuật vẫn giữ tiền tố `POSS` (store id `POSS-001`, mã đơn `POSS001-…`, voucher `POSS10K`).
 
-## Architecture Overview
+Thư mục gốc git repo là thư mục cha (`POSS_CAFE/`); ứng dụng nằm trong `POSS/`. File `package-lock.json` ở thư mục gốc repo chỉ là file rỗng — hãy chạy các lệnh npm bên trong `POSS/`.
 
-The application follows a **module-based architecture** with centralized state management in the root App component. Each major business function is isolated in a separate module component:
-
-- **Core Modules:** POS Sale screen, Payment processing, Shifts management, Accounts/User management
-- **Management Modules:** Menu & products, Inventory, Customers & loyalty, Promotions
-- **Administrative:** Store management, Reports & analytics, Notifications, Audit logs
-- **Infrastructure:** Navigation (Sidebar, Navbar), Mock data, CSS styling
-
-Key architectural patterns:
-- **State lifting:** All app state managed in App.jsx, passed down via props
-- **Module-based UI:** Each module in `src/components/modules/` handles one spec
-- **Spec-driven:** Guided by 11 detailed specifications in `docs/specs/` (numbered 01-11 in Vietnamese)
-- **Mock data:** `src/data/mockData.js` provides realistic test data with stores, users, products, orders, etc.
-- **Role-based access:** OWNER, MANAGER, STAFF roles with permission-specific UI rendering
-
-## Build & Run
+## Lệnh
 
 ```bash
-npm install                    # Install dependencies
-npm run dev                    # Start dev server (HMR enabled, port 5173 by default)
-npm run build                  # Build for production (output: dist/)
-npm run preview                # Preview production build locally
+npm install
+npm run dev       # Vite dev server (cổng 5173)
+npm run build     # build production ra dist/
+npm run preview   # chạy thử bản build
+npm run lint      # oxlint (config: .oxlintrc.json — plugin react + oxc, rules-of-hooks là error)
 ```
 
-## Test
+Chưa cấu hình test runner. Kiểm tra thay đổi bằng `npm run lint`, `npm run build`, và thao tác trực tiếp màn hình trên trình duyệt.
 
-Currently no automated test suite. Manual testing is conducted against the 11 spec documents in `docs/specs/`. When adding tests:
+## Kiến trúc
+
+**Spec quyết định mọi thứ.** `docs/specs/01-…13-*.md` (tiếng Việt) định nghĩa bảng phân quyền, quy tắc nghiệp vụ và các màn hình của từng tính năng. Tên module, nhãn sidebar (`'04. Màn hình bán hàng'`), nội dung audit log và comment trong code đều tham chiếu số spec (`// Spec 01: …`). Đọc spec tương ứng trước khi sửa một module, và giữ quy ước đánh số spec trong nhãn UI và comment.
+
+| Spec | Module id | Component |
+|------|-----------|-----------|
+| 01 Đăng nhập & phân quyền | `accounts` | `AccountsModule.jsx` (+ logic đăng nhập/khóa trong `App.jsx`) |
+| 02 Chuỗi cửa hàng | `stores` | `StoresModule.jsx` |
+| 03 Menu | `menu` | `MenuModule.jsx` |
+| 04 Màn hình bán hàng | `pos` | `PosSale.jsx` |
+| 05 Thanh toán | `payments` | `PaymentModal.jsx` (mở từ POS; màn hình `payments` chỉ là trang dẫn quay lại POS) |
+| 06 Ca làm việc | `shifts` | `ShiftsModule.jsx` |
+| 07 Kho | `inventory` | `InventoryModule.jsx` |
+| 08 Khách hàng/loyalty | `customers` | `CustomersModule.jsx` |
+| 09 Khuyến mãi | `promotions` | `PromotionsModule.jsx` |
+| 10 Báo cáo | `reports` | `ReportsModule.jsx` |
+| 11 Thông báo | `notifications` | `NotificationsModule.jsx` |
+| 12 Ví khách hàng | `wallet` | `WalletModule.jsx` (+ thanh toán bằng ví trong `PaymentModal.jsx`) |
+| 13 Nhân sự, chấm công & lương | `staff` | `StaffModule.jsx` + các tab trong `staff/`; logic tính công/lương thuần ở `src/utils/hr.js` |
+
+**Điều hướng.** `App.jsx` giữ `currentModule` và render một module qua chuỗi các khối `currentModule === '<id>' && <Module …/>`. Để thêm màn hình: thêm item (gồm `id`, `roles`, icon) vào các section trong `Sidebar.jsx`, rồi thêm khối render tương ứng trong `App.jsx`. Các module chuyển màn hình qua prop `onNavigate(moduleId)`.
+
+**State chia giữa App và các module.** `App.jsx` chỉ giữ state dùng chung: stores/selectedStore, users/currentUser/currentUserRole, auditLogs (ghi qua helper `addAuditLog(action, detail)`), activeShift, notifications, `hrData` (lịch ca, chấm công, thưởng/phạt, trạng thái bảng lương của Spec 13), đơn hàng đang chờ thanh toán, và state UI của sidebar/modal đăng xuất. Phần lớn module tự khởi tạo `useState` *riêng* trực tiếp từ `src/data/mockData.js` (khách hàng, đơn hàng, ví, khuyến mãi/giao dịch ví, menu, khuyến mãi…). Hệ quả:
+- Dữ liệu không được chia sẻ giữa các module — ví dụ `PosSale`, `PaymentModal` và `WalletModule` mỗi cái import `INITIAL_WALLETS` riêng, nên nạp tiền ví ở một nơi sẽ không hiển thị ở nơi khác.
+- Chuyển màn hình sẽ unmount module và mất state local của nó.
+- Nếu thay đổi cần hiển thị trên nhiều màn hình, hãy lift state đó lên `App.jsx` và truyền xuống qua props (đây là hướng mà plan ví trong `docs/superpowers/plans/` dự định).
+
+**Luồng thanh toán.** `PosSale` gọi `onOpenPayment(orderData)`; App lưu vào `pendingPaymentOrder` và render `PaymentModal` toàn cục; khi hoàn tất, App tăng `activeShift.ordersCount` / `totalSales` theo `orderData.grandTotal`.
+
+**Vai trò.** `OWNER` / `MANAGER` / `STAFF` (`ROLES` trong mockData). Mỗi module nhận `currentUserRole` và tự ẩn/hiện UI theo bảng phân quyền trong spec; `Sidebar` ẩn các item có `roles` không chứa vai trò hiện tại. Người dùng chuyển tài khoản bằng mã PIN (`handleSwitchUser` trong App): chấp nhận `pin` riêng của user hoặc PIN demo chung `1234`; sai 5 lần sẽ đặt `status: 'LOCKED'`; user không phải Owner sẽ tự động chuyển sang cửa hàng đầu tiên trong `assignedStores`.
+
+**Audit log.** Các thao tác nhạy cảm thêm một entry `{ id: 'LOG-<timestamp>', time, user, action, detail }` vào đầu `auditLogs` trong App (hiển thị ở AccountsModule). Khi thêm thao tác cần audit, giữ đúng cấu trúc này và nhãn `action` tiếng Việt viết hoa (ví dụ `'KHÓA TÀI KHOẢN'`).
+
+## Styling
+
+Giao diện tối (dark theme). Design token là các CSS custom property trên `:root` trong `src/index.css` (`--text-primary`, `--text-muted`, `--bg-surface`, …), cùng với các class dùng chung (`btn-primary`, `btn-secondary`, `modal-overlay`, `modal-card`, các class layout). `src/App.css` chỉ là phần thừa không dùng từ template Vite (`.counter`, `.hero`) — style thật hãy đặt trong `index.css`. Component dùng các class trên kết hợp nhiều object `style={{…}}` inline — hãy theo pattern này thay vì đưa thêm CSS framework. Sidebar là drawer khi màn hình ≤1024px và có thể thu gọn trên desktop.
+
+## Công cụ trong repo
+
+`docs/superpowers/plans/` chứa các implementation plan viết cho bộ skill superpowers. Skill thiết kế `ui-ux-pro-max` được đặt sẵn trong `.claude/skills/` (và bản sao trong `.agents/skills/`); truy vấn bằng:
+
 ```bash
-npm test                       # Run all tests (when configured)
-npm test -- path/to/file       # Run single test file
+python .claude/skills/ui-ux-pro-max/scripts/search.py "POS point of sale dashboard" --design-system -p "POSS System"
 ```
-
-## Lint / Format
-
-```bash
-npm run lint                   # Run Oxlint (code quality checking)
-```
-
-Oxlint configuration: `.oxlintrc.json` (Rust-based linter, faster than ESLint)
-
-## Key Files & Directories
-
-| Path | Purpose |
-|------|---------|
-| `src/App.jsx` | Root component holding all app state and module routing; user authentication logic |
-| `src/components/modules/` | Feature modules (PosSale, MenuModule, InventoryModule, etc.); each handles one spec |
-| `src/components/Sidebar.jsx` | Navigation sidebar with role-based menu filtering |
-| `src/components/Navbar.jsx` | Top navbar with user/store selector, shift info, notifications |
-| `src/data/mockData.js` | Mock stores, users (OWNER/MANAGER/STAFF), products, orders, notifications |
-| `src/App.css` | Global styling, layout grid, CSS variables (colors, spacing, typography) |
-| `docs/specs/` | 11 functional specifications in Vietnamese (01-11) guiding feature implementation |
-| `.oxlintrc.json` | Oxlint configuration for code quality |
-
-## Important Development Notes
-
-**State Management:** All state lives in App.jsx and flows down via props. No external state library (Redux/Zustand). This keeps the architecture simple but makes App.jsx large (~420 lines). When splitting modules into separate components, continue lifting state to App.
-
-**Specifications-Driven Development:** Each numbered spec doc (01-11) maps to a feature set. When implementing or debugging:
-- Spec 01: Login & permissions (AccountsModule, handleSwitchUser, currentUserRole)
-- Spec 04: POS sale screen (PosSale, PaymentModal)
-- Spec 05: Payment processing (PaymentModal)
-- Other specs: See docs/specs/ for UI/business rules
-
-**Role-Based Access:** Check `currentUserRole` (OWNER/MANAGER/STAFF) before rendering sensitive UI. Example in Sidebar.jsx filters menu items by role.
-
-**Audit Logging:** App maintains `auditLogs` state recording login, logout, account changes, transactions. Displayed in AccountsModule.
-
-**Mobile Responsiveness:** Sidebar supports mobile drawer (isMobileMenuOpen) and desktop collapse (isSidebarCollapsedDesktop). CSS uses media queries.
-
-## UI/UX Pro Max Skill
-
-The repository includes the `ui-ux-pro-max` design intelligence skill configured for both Claude Code and Antigravity:
-- **Location:** `.claude/skills/ui-ux-pro-max/` and `.agents/skills/ui-ux-pro-max/`
-- **Search design systems & color palettes:**
-  ```bash
-  python .claude/skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system -p "<product_name>"
-  ```
-- **Example for POSS:**
-  ```bash
-  python .claude/skills/ui-ux-pro-max/scripts/search.py "POS point of sale dashboard" --design-system -p "POSS System"
-  ```
-
-## Common Development Patterns
-
-**Opening a New Screen:** Add a module case in App.jsx's main viewport switch statement; pass necessary state as props; add navigation handler in handleNavigate.
-
-**Adding a Feature to an Existing Module:** Edit the module component (e.g., PosSale.jsx), add UI + state handling, pass callbacks back to parent (App) if state needs to persist.
-
-**Updating Mock Data:** Edit `src/data/mockData.js` and re-import in App.jsx to test with new data (users, stores, products, orders, etc.).
-
-**Styling:** Use CSS classes defined in src/App.css with CSS custom properties (--text-primary, --bg-surface, etc.) for consistent theming.

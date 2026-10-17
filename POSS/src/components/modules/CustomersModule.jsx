@@ -203,7 +203,7 @@ export function CustomersModule({ currentUserRole }) {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px' }}>
                 <div>
-                  <div style={{ fontSize: '12px', letterSpacing: '1px', textTransform: 'uppercase', opacity: 0.85 }}>Thẻ Thành Viên POSS</div>
+                  <div style={{ fontSize: '12px', letterSpacing: '1px', textTransform: 'uppercase', opacity: 0.85 }}>Thẻ Thành Viên Ba.li Poss</div>
                   <div style={{ fontSize: '18px', fontWeight: '900', letterSpacing: '-0.3px', marginTop: '2px' }}>
                     {getTierColor(selectedCustomer.tier).name}
                   </div>

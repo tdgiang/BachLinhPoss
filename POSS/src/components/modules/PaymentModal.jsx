@@ -130,10 +130,10 @@ export function PaymentModal({ orderData, onClose, onCompletePayment, currentSto
             }}>
               {[
                 { id: 'CASH', label: 'Tiền Mặt', icon: Banknote, note: 'Khách đưa & thối' },
-                { id: 'WALLET', label: 'Ví POSS (Spec 12)', icon: Wallet, note: 'Số dư tích lũy KH' },
+                { id: 'WALLET', label: 'Ví Ba.li Poss (Spec 12)', icon: Wallet, note: 'Số dư tích lũy KH' },
                 { id: 'VIETQR', label: 'VietQR Ngân Hàng', icon: QrCode, note: 'Mã QR tự động' },
                 { id: 'EWALLET', label: 'Ví Điện Tử', icon: Smartphone, note: 'MoMo, ZaloPay...' },
-                { id: 'CARD', label: 'Thẻ / POS POSS', icon: CreditCard, note: 'Visa, Master, Napas' },
+                { id: 'CARD', label: 'Thẻ / POS Ba.li Poss', icon: CreditCard, note: 'Visa, Master, Napas' },
                 { id: 'SPLIT', label: 'Chia Thanh Toán', icon: Divide, note: 'Nhiều phương thức' },
               ].map(item => {
                 const Icon = item.icon;
@@ -345,7 +345,7 @@ export function PaymentModal({ orderData, onClose, onCompletePayment, currentSto
                                   // Auto-fill split payment parts
                                   setMethod('SPLIT');
                                   setSplitParts([
-                                    { method: 'Ví POSS', amount: customerWallet.balance }
+                                    { method: 'Ví Ba.li Poss', amount: customerWallet.balance }
                                   ]);
                                   setCurrentSplitAmount(remainingNeed);
                                   setCurrentSplitMethod('CASH');
@@ -563,7 +563,7 @@ export function PaymentModal({ orderData, onClose, onCompletePayment, currentSto
                         <option value="VIETQR">VietQR</option>
                         <option value="MOMO">MoMo</option>
                         <option value="CARD">Thẻ</option>
-                        <option value="WALLET">Ví POSS</option>
+                        <option value="WALLET">Ví Ba.li Poss</option>
                       </select>
                       <button onClick={handleAddSplitPart} className="btn-secondary" style={{ height: '36px', fontSize: '11px', whiteSpace: 'nowrap' }}>
                         + Thêm phần
@@ -600,7 +600,7 @@ export function PaymentModal({ orderData, onClose, onCompletePayment, currentSto
             {/* Thermal Receipt Paper (80mm) */}
             <div className="receipt-paper">
               <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-                <div style={{ fontSize: '16px', fontWeight: '800' }}>POSS COFFEE & TEA</div>
+                <div style={{ fontSize: '16px', fontWeight: '800' }}>BA.LI POSS COFFEE & TEA</div>
                 <div style={{ fontSize: '10px' }}>{currentStore?.address || '128 Xuân Thủy, Cầu Giấy, Hà Nội'}</div>
                 <div style={{ fontSize: '10px' }}>Hotline: {currentStore?.phone || '024 3838 9999'} • MST: 0109988776</div>
               </div>
@@ -680,7 +680,7 @@ export function PaymentModal({ orderData, onClose, onCompletePayment, currentSto
               <div style={{ textAlign: 'center', marginTop: '16px', fontSize: '10px', color: '#6b7280' }}>
                 Cảm ơn quý khách và hẹn gặp lại!
                 <br />
-                poss.vn • WiFi: POSS_Guest
+                poss.vn • WiFi: BaliPoss_Guest
               </div>
             </div>
 

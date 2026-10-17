@@ -1,4 +1,17 @@
 // Comprehensive Mock Data for POSS F&B System (All 11 Modules)
+import {
+  SHIFT_TEMPLATES,
+  addDays,
+  isShiftOver,
+  minutesNow,
+  pad,
+  payrollKey,
+  scheduleId,
+  startOfWeek,
+  timeToMinutes,
+  toDateKey,
+  toMonthKey,
+} from '../utils/hr';
 
 export const ROLES = {
   OWNER: { id: 'OWNER', name: 'Owner (Chủ chuỗi)', color: '#ef4444', bg: '#fef2f2' },
@@ -53,12 +66,48 @@ export const INITIAL_USERS = [
     avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80',
     createdAt: '2026-04-12',
   },
+  {
+    id: 'USR-005',
+    name: 'Phạm Quốc Bảo',
+    phone: '0905667788',
+    email: 'bao.staff@poss.vn',
+    role: 'STAFF',
+    pin: '1111',
+    assignedStores: ['POSS-001'],
+    status: 'ACTIVE',
+    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
+    createdAt: '2026-05-04',
+  },
+  {
+    id: 'USR-006',
+    name: 'Vũ Ngọc Hân',
+    phone: '0868123987',
+    email: 'han.staff@poss.vn',
+    role: 'STAFF',
+    pin: '2222',
+    assignedStores: ['POSS-001'],
+    status: 'ACTIVE',
+    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
+    createdAt: '2026-07-20',
+  },
+  {
+    id: 'USR-007',
+    name: 'Bùi Thanh Tâm',
+    phone: '0944556677',
+    email: 'tam.staff@poss.vn',
+    role: 'STAFF',
+    pin: '3333',
+    assignedStores: ['POSS-002'],
+    status: 'ACTIVE',
+    avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80',
+    createdAt: '2026-06-01',
+  },
 ];
 
 export const INITIAL_STORES = [
   {
     id: 'POSS-001',
-    name: 'POSS Cầu Giấy (Flagship)',
+    name: 'Ba.li Poss Cầu Giấy (Flagship)',
     address: '128 Xuân Thủy, Dịch Vọng Hậu, Cầu Giấy, Hà Nội',
     phone: '024 3838 9999',
     email: 'caugiay@poss.vn',
@@ -78,7 +127,7 @@ export const INITIAL_STORES = [
   },
   {
     id: 'POSS-002',
-    name: 'POSS Hoàn Kiếm',
+    name: 'Ba.li Poss Hoàn Kiếm',
     address: '45 Đinh Tiên Hoàng, Hàng Bạc, Hoàn Kiếm, Hà Nội',
     phone: '024 3939 8888',
     email: 'hoankiem@poss.vn',
@@ -98,7 +147,7 @@ export const INITIAL_STORES = [
   },
   {
     id: 'POSS-003',
-    name: 'POSS Quận 1',
+    name: 'Ba.li Poss Quận 1',
     address: '88 Nguyễn Huệ, Bến Nghé, Quận 1, TP. Hồ Chí Minh',
     phone: '028 3822 7777',
     email: 'quan1@poss.vn',
@@ -118,7 +167,7 @@ export const INITIAL_STORES = [
   },
   {
     id: 'POSS-004',
-    name: 'POSS Thảo Điền',
+    name: 'Ba.li Poss Thảo Điền',
     address: '15 Xuân Thủy, Thảo Điền, TP. Thủ Đức, TP. Hồ Chí Minh',
     phone: '028 3744 6666',
     email: 'thaodien@poss.vn',
@@ -511,7 +560,7 @@ export const INITIAL_NOTIFICATIONS = [
   {
     id: 'NOTI-01',
     title: 'Cảnh báo sắp hết hàng: Trà Mãng Cầu Đắk Lắk',
-    content: 'Tồn kho tại POSS Cầu Giấy chỉ còn 12 ly, dưới ngưỡng tối thiểu 15 ly. Vui lòng tạo phiếu nhập kho.',
+    content: 'Tồn kho tại Ba.li Poss Cầu Giấy chỉ còn 12 ly, dưới ngưỡng tối thiểu 15 ly. Vui lòng tạo phiếu nhập kho.',
     type: 'INVENTORY',
     unread: true,
     time: '15 phút trước',
@@ -551,7 +600,7 @@ export const AUDIT_LOGS = [
   { id: 'LOG-002', time: '09:30:14', user: 'Lê Hoàng Nam (Staff)', action: 'Chi tiền ngoài ca', detail: 'Chi 150.000đ mua đá bi gấp' },
   { id: 'LOG-003', time: '08:45:00', user: 'Trần Thùy Linh (Manager)', action: 'Đổi trạng thái món', detail: 'Đặt Matcha Latte sang "Tạm hết hàng"' },
   { id: 'LOG-004', time: '07:00:22', user: 'Lê Hoàng Nam (Staff)', action: 'Mở ca làm việc', detail: 'Mở ca sáng với 1.500.000đ tiền mặt đầu ca' },
-  { id: 'LOG-005', time: '06:55:10', user: 'Lê Hoàng Nam (Staff)', action: 'Đăng nhập hệ thống', detail: 'Đăng nhập thành công bằng mã PIN tại POSS Cầu Giấy' },
+  { id: 'LOG-005', time: '06:55:10', user: 'Lê Hoàng Nam (Staff)', action: 'Đăng nhập hệ thống', detail: 'Đăng nhập thành công bằng mã PIN tại Ba.li Poss Cầu Giấy' },
 ];
 
 export const INITIAL_WALLETS = [
@@ -649,7 +698,7 @@ export const INITIAL_WALLET_TRANSACTIONS = [
     promoId: 'WPROM-001',
     promoName: 'Nạp Càng Nhiều - Thưởng Càng Lớn (Bậc Thang)',
     staff: 'Lê Hoàng Nam (Staff)',
-    store: 'POSS Cầu Giấy',
+    store: 'Ba.li Poss Cầu Giấy',
     time: '15/10/2026 14:30:15',
     notes: 'Khách nạp 500.000đ qua VietQR, nhận 600.000đ vào ví (+20% bonus)',
   },
@@ -668,7 +717,7 @@ export const INITIAL_WALLET_TRANSACTIONS = [
     promoId: null,
     promoName: 'Không áp dụng',
     staff: 'Lê Hoàng Nam (Staff)',
-    store: 'POSS Cầu Giấy',
+    store: 'Ba.li Poss Cầu Giấy',
     time: '14/10/2026 18:22:40',
     notes: 'Thanh toán đơn hàng 3 sản phẩm tại bàn 04',
   },
@@ -687,7 +736,7 @@ export const INITIAL_WALLET_TRANSACTIONS = [
     promoId: 'WPROM-001',
     promoName: 'Nạp Càng Nhiều - Thưởng Càng Lớn (Bậc Thang)',
     staff: 'Trần Thùy Linh (Manager)',
-    store: 'POSS Hoàn Kiếm',
+    store: 'Ba.li Poss Hoàn Kiếm',
     time: '14/10/2026 11:15:00',
     notes: 'Khách nạp 200.000đ tiền mặt tại quầy',
   },
@@ -705,9 +754,117 @@ export const INITIAL_WALLET_TRANSACTIONS = [
     method: 'Điều chỉnh hệ thống',
     reason: 'Đền bù sự cố giao hàng trễ',
     staff: 'Nguyễn Quốc Tuấn (Owner)',
-    store: 'POSS Toàn Chuỗi',
+    store: 'Ba.li Poss Toàn Chuỗi',
     time: '12/10/2026 09:20:10',
     notes: 'Cộng tiền đền bù theo khiếu nại CSKH #TK-891',
   },
 ];
 
+
+// ---------- Spec 13: Nhân sự, ca kíp, chấm công & lương thưởng ----------
+
+export const INITIAL_EMPLOYEE_PROFILES = {
+  'USR-002': { position: 'Quản lý cửa hàng', salaryType: 'MONTHLY', rate: 12000000, allowancePerShift: 15000, startDate: '2026-02-15' },
+  'USR-003': { position: 'Thu ngân', salaryType: 'HOURLY', rate: 28000, allowancePerShift: 25000, startDate: '2026-03-01' },
+  'USR-004': { position: 'Thu ngân', salaryType: 'HOURLY', rate: 26000, allowancePerShift: 25000, startDate: '2026-04-12' },
+  'USR-005': { position: 'Pha chế (Barista)', salaryType: 'HOURLY', rate: 32000, allowancePerShift: 25000, startDate: '2026-05-04' },
+  'USR-006': { position: 'Phục vụ (Part-time)', salaryType: 'HOURLY', rate: 25000, allowancePerShift: 20000, startDate: '2026-07-20' },
+  'USR-007': { position: 'Pha chế (Barista)', salaryType: 'HOURLY', rate: 30000, allowancePerShift: 25000, startDate: '2026-06-01' },
+};
+
+// Lịch ca cố định theo tuần (Thứ 2 → Chủ nhật) dùng để sinh dữ liệu mẫu
+const HR_WEEKLY_PATTERNS = {
+  'USR-002': [['SANG', 'CHIEU'], ['SANG', 'CHIEU'], ['SANG', 'CHIEU'], ['SANG', 'CHIEU'], ['SANG', 'CHIEU'], ['SANG'], []],
+  'USR-003': [['SANG'], ['SANG'], ['CHIEU'], ['SANG'], ['TOI'], ['CHIEU', 'TOI'], []],
+  'USR-005': [['CHIEU'], ['TOI'], ['TOI'], ['CHIEU'], ['CHIEU'], ['SANG'], ['SANG', 'CHIEU']],
+  'USR-006': [[], ['TOI'], [], ['TOI'], [], ['TOI'], ['CHIEU', 'TOI']],
+  'USR-004': [['SANG'], ['SANG'], ['SANG'], [], ['CHIEU'], ['CHIEU'], ['SANG']],
+  'USR-007': [['CHIEU'], ['CHIEU'], [], ['TOI'], ['TOI'], ['SANG', 'CHIEU'], ['CHIEU']],
+};
+
+const hrHash = (str) => {
+  let h = 0;
+  for (const c of str) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return h;
+};
+const hrTime = (minutes) => `${pad(Math.floor(minutes / 60))}:${pad(minutes % 60)}`;
+
+// Sinh lịch ca + chấm công từ đầu tháng trước đến hết tuần sau, tương đối theo ngày hiện tại
+function buildHrMock() {
+  const now = new Date();
+  const today = toDateKey(now);
+  const nowM = minutesNow(now);
+  const storeOf = Object.fromEntries(INITIAL_USERS.map((u) => [u.id, u.assignedStores[0]]));
+
+  // Hôm nay Linh (Manager) và Nam (Staff) luôn có ca đang diễn ra để demo chấm công
+  const liveShift = (
+    SHIFT_TEMPLATES.find((t) => nowM >= timeToMinutes(t.start) - 30 && nowM < timeToMinutes(t.end))
+    || (nowM < timeToMinutes('07:00') ? SHIFT_TEMPLATES[0] : SHIFT_TEMPLATES[2])
+  ).code;
+
+  const schedule = [];
+  const attendance = [];
+  const firstDay = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const lastDay = addDays(startOfWeek(now), 13);
+
+  for (let d = firstDay; d <= lastDay; d = addDays(d, 1)) {
+    const date = toDateKey(d);
+    const weekday = (d.getDay() + 6) % 7;
+
+    Object.entries(HR_WEEKLY_PATTERNS).forEach(([userId, pattern]) => {
+      let codes = pattern[weekday];
+      if (date === today && (userId === 'USR-002' || userId === 'USR-003') && !codes.includes(liveShift)) {
+        codes = [...codes, liveShift];
+      }
+
+      codes.forEach((shiftCode) => {
+        const entry = { id: scheduleId(userId, date, shiftCode), userId, date, shiftCode, storeId: storeOf[userId] };
+        schedule.push(entry);
+
+        const tpl = SHIFT_TEMPLATES.find((t) => t.code === shiftCode);
+        const start = timeToMinutes(tpl.start);
+        const end = timeToMinutes(tpl.end);
+        const record = { id: entry.id, userId, date, shiftCode };
+
+        if (isShiftOver(entry, now)) {
+          const r = hrHash(entry.id) % 100;
+          if (r < 4) return; // Vắng không phép
+          if (r < 7) {
+            attendance.push({ ...record, checkIn: null, checkOut: null, excused: true, editedBy: 'Trần Thùy Linh', editReason: 'Nghỉ ốm có giấy xác nhận' });
+          } else if (r < 19) {
+            attendance.push({ ...record, checkIn: hrTime(start + 7 + (r % 18)), checkOut: hrTime(end + (r % 4)) });
+          } else if (r < 25) {
+            attendance.push({ ...record, checkIn: hrTime(start - (r % 6)), checkOut: hrTime(end - 10 - (r % 20)) });
+          } else if (r < 27 && date !== today) {
+            attendance.push({ ...record, checkIn: hrTime(start - 3), checkOut: null });
+          } else {
+            attendance.push({ ...record, checkIn: hrTime(start - (r % 9)), checkOut: hrTime(end + (r % 7)) });
+          }
+        } else if (date === today && userId === 'USR-002' && nowM >= start) {
+          attendance.push({ ...record, checkIn: hrTime(start - 4), checkOut: null });
+        }
+      });
+    });
+  }
+
+  const thisMonth = toMonthKey(now);
+  const lastMonth = toMonthKey(firstDay);
+
+  return {
+    profiles: INITIAL_EMPLOYEE_PROFILES,
+    schedule,
+    attendance,
+    adjustments: [
+      { id: 'ADJ-001', userId: 'USR-005', month: lastMonth, type: 'BONUS', amount: 300000, reason: 'Nhân viên xuất sắc tháng', by: 'Trần Thùy Linh' },
+      { id: 'ADJ-002', userId: 'USR-003', month: lastMonth, type: 'PENALTY', amount: 50000, reason: 'Làm vỡ 2 ly thủy tinh', by: 'Trần Thùy Linh' },
+      { id: 'ADJ-003', userId: 'USR-007', month: lastMonth, type: 'BONUS', amount: 200000, reason: 'Hỗ trợ khai trương menu mùa thu', by: 'Nguyễn Văn Tuấn' },
+      { id: 'ADJ-004', userId: 'USR-002', month: thisMonth, type: 'BONUS', amount: 500000, reason: 'Cửa hàng đạt 120% doanh thu tuần', by: 'Nguyễn Văn Tuấn' },
+    ],
+    payrollStatus: {
+      [payrollKey('POSS-001', lastMonth)]: 'LOCKED',
+      [payrollKey('POSS-002', lastMonth)]: 'PAID',
+    },
+  };
+}
+
+export const INITIAL_HR_DATA = buildHrMock();

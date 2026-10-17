@@ -342,7 +342,7 @@ export function StoresModule({ currentUserRole, stores, setStores, selectedStore
                 <label style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-dim)' }}>Tên cửa hàng</label>
                 <input 
                   type="text" 
-                  placeholder="VD: POSS Ba Đình"
+                  placeholder="VD: Ba.li Poss Ba Đình"
                   value={newName} 
                   onChange={(e) => setNewName(e.target.value)}
                   className="input-dark" 

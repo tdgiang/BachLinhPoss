@@ -119,7 +119,7 @@ export function InventoryModule({ currentUserRole, currentStore }) {
           <div style={{ fontSize: '20px', fontWeight: '800', color: 'var(--text-main)', marginTop: '4px', whiteSpace: 'nowrap' }}>
             {stockItems.length} SKU
           </div>
-          <div style={{ fontSize: '11px', color: 'var(--text-dim)', marginTop: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{currentStore?.name?.replace('POSS ', '')}</div>
+          <div style={{ fontSize: '11px', color: 'var(--text-dim)', marginTop: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{currentStore?.name?.replace('Ba.li Poss ', '')}</div>
         </div>
 
         <div className="card-glass" style={{ padding: '16px' }}>
@@ -335,7 +335,7 @@ export function InventoryModule({ currentUserRole, currentStore }) {
               <input 
                 type="text" 
                 disabled 
-                value={currentStore?.name || 'POSS Cầu Giấy'} 
+                value={currentStore?.name || 'Ba.li Poss Cầu Giấy'} 
                 className="input-dark" 
                 style={{ marginTop: '4px', opacity: 0.7 }}
               />

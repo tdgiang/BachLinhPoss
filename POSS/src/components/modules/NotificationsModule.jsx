@@ -209,7 +209,7 @@ export function NotificationsModule({ notifications, setNotifications, onNavigat
                 >
                   <option value="ALL_CHAIN">Toàn bộ nhân sự toàn chuỗi</option>
                   <option value="MANAGERS">Chỉ Quản lý các cửa hàng</option>
-                  <option value="CAUGIAY">Chỉ nhân viên POSS Cầu Giấy</option>
+                  <option value="CAUGIAY">Chỉ nhân viên Ba.li Poss Cầu Giấy</option>
                 </select>
               </div>
 

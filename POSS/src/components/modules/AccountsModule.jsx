@@ -99,7 +99,7 @@ export function AccountsModule({
     if (!matchedUser) {
       setAuthFeedback({
         type: 'error',
-        message: 'Số điện thoại không tồn tại trong hệ thống POSS!'
+        message: 'Số điện thoại không tồn tại trong hệ thống Ba.li Poss!'
       });
       return;
     }
